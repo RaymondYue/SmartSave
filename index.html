@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <title>SmartSave｜金融科技・信用卡智能顧問</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SmartSave 用 WhatsApp 幫你比較多間銀行信用卡優惠，三十秒內話你知用邊張卡最多 Asia Miles 或現金回贈，唔使再自己格價。" />
+  <!-- Inter font (Fintech 風格常用) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    /* ----- RESET & 基礎變數 ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans HK", "PingFang HK", sans-serif;
+      background-color: #F8FAFE;     /* 極淺灰藍背景 */
+      color: #1A2C3E;                /* 深藍灰主字 */
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* 容器 */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ----- 頂部導航 (sticky 金融科技感) ----- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+      padding: 16px 0;
+    }
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #0B2B4F, #1E4780);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 32px;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    .main-nav a {
+      color: #2C3E50;
+      transition: color 0.2s;
+      padding: 6px 0;
+      border-bottom: 2px solid transparent;
+    }
+
+    .main-nav a:hover {
+      color: #1E4780;
+      border-bottom-color: #1E4780;
+    }
+
+    /* 響應式導航 (簡單換行) */
+    @media (max-width: 640px) {
+      .header-container {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .main-nav {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    /* ----- 按鈕 (金融科技漸變) ----- */
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      line-height: 1;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: none;
+      box-shadow: 0 8px 16px -6px rgba(0,80,200,0.2);
+    }
+
+    .btn-primary {
+      background: linear-gradient(145deg, #0B2B4F, #1E4780);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(145deg, #123B61, #23599E);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 24px -8px rgba(0,80,200,0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #1E4780;
+      border: 1.5px solid #CAD6E3;
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: #F0F5FE;
+      border-color: #1E4780;
+      transform: translateY(-2px);
+    }
+
+    /* 章節通用 */
+    section {
+      padding: 80px 0;
+    }
+
+    h1, h2, h3 {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0B2B4F;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 24px;
+    }
+
+    p {
+      color: #2E405B;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    /* ----- HERO 區 (mockup 更新) ----- */
+    #hero {
+      background: #FFFFFF;
+      border-bottom: 1px solid #EAF0F6;
+    }
+
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .hero-text {
+      flex: 1 1 400px;
+    }
+
+    .hero-mockup {
+      flex: 1 1 340px;
+      background: #F5F9FF;
+      border-radius: 32px;
+      padding: 24px;
+      box-shadow: 0 30px 50px -20px rgba(0,40,100,0.25);
+      border: 1px solid rgba(30,71,128,0.1);
+      backdrop-filter: blur(4px);
+    }
+
+    .chat-bubble {
+      border-radius: 20px;
+      padding: 14px 18px;
+      font-size: 0.95rem;
+      max-width: 90%;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+    }
+
+    .chat-bubble.user {
+      background-color: #FFFFFF;
+      border: 1px solid #DCE5EC;
+      align-self: flex-start;
+      border-bottom-left-radius: 6px;
+    }
+
+    .chat-bubble.smartsave {
+      background: linear-gradient(145deg, #0B2B4F, #1E4780);
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 6px;
+    }
+
+    .hero-cta {
+      margin: 32px 0 16px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .hero-note {
+      font-size: 0.9rem;
+      color: #6B7C93;
+    }
+
+    /* 問題列表 */
+    #problem ul, #trust ul, #pricing ul {
+      padding-left: 24px;
+      margin: 16px 0 24px;
+    }
+
+    #problem li, #trust li, #pricing li {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      color: #2E405B;
+    }
+
+    /* How it works */
+    .steps {
+      padding-left: 24px;
+      margin: 24px 0;
+    }
+    .steps li {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .example-box {
+      background: #F0F5FE;
+      border-left: 6px solid #1E4780;
+      padding: 24px;
+      border-radius: 20px;
+      margin-top: 32px;
+    }
+
+    /* 功能卡片 */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 28px;
+      margin-top: 40px;
+    }
+
+    .feature-item {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 28px 22px;
+      border: 1px solid #EAF0F6;
+      box-shadow: 0 15px 30px -12px rgba(0,0,0,0.05);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 30px 40px -16px rgba(0,50,100,0.15);
+    }
+
+    .feature-item h3 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-item p {
+      font-size: 1rem;
+      color: #3A4E68;
+    }
+
+    /* 團隊卡片 */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 40px;
+    }
+
+    .team-member {
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 28px;
+      border: 1px solid #EAF0F6;
+      box-shadow: 0 15px 25px -12px rgba(0,0,0,0.05);
+    }
+
+    .team-member h3 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+
+    .team-member ul {
+      padding-left: 20px;
+    }
+
+    .team-member li {
+      font-size: 1rem;
+      margin-bottom: 10px;
+      color: #2E405B;
+    }
+
+    /* 信任微文案 */
+    .microcopy {
+      font-size: 0.9rem;
+      color: #6B7C93;
+      border-top: 1px dashed #C7D9E8;
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    /* 表單 */
+    #signup {
+      background: #FFFFFF;
+    }
+
+    #signup form {
+      max-width: 520px;
+      margin: 32px 0 16px;
+    }
+
+    #signup label {
+      font-weight: 600;
+      color: #0B2B4F;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    #signup input[type="tel"] {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1rem;
+      border: 1.5px solid #DCE5EC;
+      border-radius: 40px;
+      background: #F9FCFF;
+      transition: 0.2s;
+      margin-bottom: 8px;
+    }
+
+    #signup input[type="tel"]:focus {
+      outline: none;
+      border-color: #1E4780;
+      box-shadow: 0 0 0 3px rgba(30,71,128,0.2);
+    }
+
+    .form-note {
+      font-size: 0.85rem;
+      color: #6B7C93;
+      display: block;
+      margin-bottom: 20px;
+    }
+
+    .disclaimer {
+      font-size: 0.8rem;
+      color: #8A9BB0;
+    }
+
+    /* Footer */
+    #footer {
+      background: #FFFFFF;
+      border-top: 1px solid #E5EEF5;
+      padding: 32px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: #4A617C;
+      font-size: 0.9rem;
+    }
+
+    .footer-inner nav a {
+      margin-left: 28px;
+      color: #2C3E50;
+      font-weight: 500;
+    }
+
+    .footer-inner nav a:hover {
+      color: #1E4780;
+    }
+
+    /* 響應式微調 */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      h2 { font-size: 1.9rem; }
+      .hero-inner { flex-direction: column; }
+      .hero-cta { justify-content: center; }
+      .footer-inner { flex-direction: column-reverse; text-align: center; }
+      .footer-inner nav a { margin: 0 12px; }
+    }
+
+    /* 簡單動畫點綴 */
+    .btn, .feature-item, .team-member {
+      will-change: transform;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導航 + LOGO (金融科技感) -->
+  <header class="site-header">
+    <div class="container header-container">
+      <div class="logo">SmartSave</div>
+      <nav class="main-nav">
+        <a href="#hero">首頁</a>
+        <a href="#how-it-works">運作方式</a>
+        <a href="#pricing">收費</a>
+        <a href="#signup">加入等候名單</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero 區塊 (更新 mockup 與文案) -->
+  <section id="hero">
+    <div class="container hero-inner">
+      <div class="hero-text">
+        <h1>WhatsApp 一問，即刻知邊張信用卡最抵。</h1>
+        <p>
+          SmartSave 幫你比較多間銀行信用卡優惠，三十秒內話你知用邊張卡最多 Asia Miles 或現金回贈，
+          唔使再上格價網站做功課。
+        </p>
+        <div class="hero-cta">
+          <a href="#signup" class="btn btn-primary">用 WhatsApp 試一試</a>
+          <a href="#how-it-works" class="btn btn-secondary">睇吓點樣用</a>
+        </div>
+        <p class="hero-note">首 1,000 位登記用戶，優先試用 Beta 版本。</p>
+      </div>
+
+      <div class="hero-mockup">
+        <div class="chat-bubble user">
+          📱 我想飛東京，邊張信用卡可以賺最多 Asia Miles？
+        </div>
+        <div class="chat-bubble smartsave">
+          ✈️ 建議你用：<strong>匯豐Visa Signature</strong><br />
+          ‧ 機票簽賬：每 HK$3.6 = 1 里數<br />
+          ‧ 今次預計可賺：約 9,200 里數<br />
+          🔥 限時網上簽賬額外 12% 回贈
+        </div>
+        <div class="chat-bubble user" style="margin-top:16px;">
+          💳 咁食飯同超市呢？
+        </div>
+        <div class="chat-bubble smartsave">
+          🍣 今日(週三)用 DBS  Eminent Card 最抵：4% 現金回贈<br />
+          🛒 超市用 BoC Pay 享 6% 回贈
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem 問題痛點 -->
+  <section id="problem">
+    <div class="container">
+      <h2>有十幾種支付方式，但每次都唔知用邊張卡？</h2>
+      <p>
+        做香港人，好大機會你個銀包入面有三四張信用卡，
+        再加埋 Apple Pay、Google Pay、各種電子錢包，
+        每次消費都要諗：「用邊張卡先至最抵？」
+      </p>
+      <ul>
+        <li>買機票、酒店前要上網逐間銀行格優惠，浪費時間。</li>
+        <li>餐飲、超市、網購都有唔同回贈，但條款細則長又複雜。</li>
+        <li>工作忙到飛起，根本冇心力日日追最新信用卡優惠。</li>
+      </ul>
+      <p>
+        結果係，你明明有卡在手，卻經常錯過最多 Asia Miles 同最高現金回贈。
+      </p>
+    </div>
+  </section>
+
+  <!-- How It Works 運作方式 -->
+  <section id="how-it-works">
+    <div class="container">
+      <h2>一句 WhatsApp，SmartSave 幫你計好哂。</h2>
+      <p>
+        SmartSave 用你已經熟悉嘅 WhatsApp，做你私人嘅信用卡優惠顧問。
+        無需安裝新 App，無需再自己研究格價網站。
+      </p>
+
+      <ol class="steps">
+        <li><strong>Step 1：</strong> 到 SmartSave 網站輸入手提電話號碼，連接你嘅 WhatsApp。</li>
+        <li><strong>Step 2：</strong> 好似平時同朋友傾計咁，直接發問：「今晚同朋友去尖沙咀食日本菜，用邊張卡最多回贈？」。</li>
+        <li><strong>Step 3：</strong> SmartSave 即時幫你比較多間銀行信用卡最新優惠，按你消費類型計出最抵用邊張卡，並講埋大約可以賺幾多回贈或里數。</li>
+      </ol>
+
+      <div class="example-box">
+        <h3 style="margin-bottom:8px;">實際例子：</h3>
+        <p style="margin-bottom:0;">
+          📲 你打：「下個月飛大阪，機票＋酒店大概 HK$8,000，用邊張卡最多 Asia Miles？」<br />
+          SmartSave 會回覆：建議使用某幾張卡、估算可賺里數，並提醒有冇限時加碼優惠。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features 功能亮點 -->
+  <section id="features">
+    <div class="container">
+      <h2>唔止方便，仲幫你賺盡每一分回贈。</h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <h3>多間銀行，一次過比較</h3>
+          <p>整合多間銀行信用卡優惠，不用逐個網站自己格價。</p>
+        </div>
+        <div class="feature-item">
+          <h3>支援里數同現金回贈</h3>
+          <p>無論你追 Asia Miles、里數定現金回贈，SmartSave 都可以幫你揀最啱選擇。</p>
+        </div>
+        <div class="feature-item">
+          <h3>無需安裝新 App</h3>
+          <p>透過 WhatsApp 使用，之後亦可擴展至 Telegram、Signal，減低用戶使用門檻。</p>
+        </div>
+        <div class="feature-item">
+          <h3>愈用愈識你</h3>
+          <p>長遠會根據你既往消費類型，提供更貼身、更符合你偏好嘅建議。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust 信任背書 -->
+  <section id="trust">
+    <div class="container">
+      <h2>Fintech 級別安全，透明交代你資料點用。</h2>
+      <p>
+        我哋明白，講到錢同個人資料，信任最重要。
+        所以 SmartSave 會以金融科技標準來處理你嘅資料。
+      </p>
+      <ul>
+        <li>只會在你授權情況下，讀取提供建議所需的有限資料。</li>
+        <li>清楚列明收集咩資料、用嚟做咩用途，無隱藏收費。</li>
+        <li>遵守香港相關私隱及數據保障法例，並按需要加入加密及安全防護措施。</li>
+      </ul>
+      <p class="microcopy">
+        你可以隨時停止使用或取消連接，我哋會刪除用於提供服務的個人識別資料。
+      </p>
+    </div>
+  </section>
+
+  <!-- Team 團隊 -->
+  <section id="team">
+    <div class="container">
+      <h2>團隊背景：科技 + 銀行實戰經驗。</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <h3>Wilson · Co-founder / CTO</h3>
+          <ul>
+            <li>香港科技大學 計算機工程 一級榮譽畢業。</li>
+            <li>20 年軟件工程經驗，其中 15 年專注金融科技系統。</li>
+            <li>曾為香港虛擬銀行負責 AI / LLM 項目，利用人工智能減省營運成本。</li>
+          </ul>
+        </div>
+        <div class="team-member">
+          <h3>Raymond · Co-founder / CFO / Business</h3>
+          <ul>
+            <li>超過 15 年銀行及金融機構工作經驗。</li>
+            <li>專長會計、商業分析、產品盈利模式及成本控制。</li>
+            <li>曾為多個金融產品設計商業分成方案及預算模型。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing 收費模式 -->
+  <section id="pricing">
+    <div class="container">
+      <h2>對用家免費，靠合作銀行同商戶支持。</h2>
+      <p>
+        SmartSave 面向一般用戶免費使用。
+        我哋的收入主要來自銀行、商戶同忠誠度計劃合作，確保你得到中立、透明的建議。
+      </p>
+      <ul>
+        <li>合作商戶及銀行佣金。</li>
+        <li>銀行忠誠度及推廣合作費用。</li>
+        <li>在用戶同意下顯示的精準但不打擾的廣告位。</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Signup 登記 -->
+  <section id="signup">
+    <div class="container">
+      <h2>用 WhatsApp 試一次，你就知有幾方便。</h2>
+      <p>
+        現在登記，成為首批試用 SmartSave 嘅用戶。只需輸入你嘅手提電話號碼，
+        我哋會經 WhatsApp 邀請你加入 Beta 測試。
+      </p>
+
+      <form id="signup-form">
+        <label for="phone">手提電話號碼（香港）</label>
+        <input type="tel" id="phone" name="phone" placeholder="9123 4567" required />
+        <small class="form-note">
+          我哋只會用呢個號碼同你開通 SmartSave WhatsApp 服務，不會亂發廣告或轉售你的資料。
+        </small>
+        <button type="submit" class="btn btn-primary">加入等候名單</button>
+      </form>
+
+      <p class="disclaimer">
+        提交即表示你同意接收關於 SmartSave 服務開通通知，及同意相關私隱政策和使用條款。
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container footer-inner">
+      <p>© SmartSave Technologies Limited</p>
+      <nav>
+        <a href="#hero">首頁</a>
+        <a href="#problem">點解需要</a>
+        <a href="#how-it-works">運作方式</a>
+        <a href="#signup">加入等候名單</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
