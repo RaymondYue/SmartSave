@@ -57,15 +57,15 @@
       flex-wrap: wrap;
     }
 
+    /* Logo 改為圖片容器 */
     .logo {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      background: linear-gradient(145deg, #0B2B4F, #1E4780);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.2;
+      display: flex;
+      align-items: center;      /* 確保圖片垂直置中 */
+    }
+    .logo img {
+      height: 150px;             /* PC 預設高度，適中大小 */
+      width: 400px;
+      display: block;
     }
 
     .main-nav {
@@ -97,6 +97,9 @@
         gap: 20px;
         flex-wrap: wrap;
         justify-content: center;
+      }
+      .logo img {
+        height: 36px;           /* 手機上稍微縮小，但仍清晰 */
       }
     }
 
@@ -421,10 +424,12 @@
 </head>
 <body>
 
-  <!-- 頂部導航 + LOGO (金融科技感) -->
+  <!-- 頂部導航 + LOGO (替換為 PNG 圖片) -->
   <header class="site-header">
     <div class="container header-container">
-      <div class="logo">SmartSave</div>
+      <div class="logo">
+        <img src="smartSave-logo.png" alt="SmartSave">
+      </div>
       <nav class="main-nav">
         <a href="#hero">首頁</a>
         <a href="#how-it-works">運作方式</a>
