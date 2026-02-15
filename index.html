@@ -63,10 +63,15 @@
       align-items: center;      /* 確保圖片垂直置中 */
     }
     .logo img {
-      height: auto;             /* PC 預設高度，適中大小 */
-      width: auto;
-      display: block;
+    height: clamp(40px, 8vw, 70px);
+    width: auto;
+    display: block;
+  }
+  @media (max-width: 400px) {
+    .logo img {
+      height: clamp(36px, 10vw, 48px);
     }
+  }
 
     .main-nav {
       display: flex;
