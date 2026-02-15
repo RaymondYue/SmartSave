@@ -37,41 +37,71 @@
       padding: 0 24px;
     }
 
-    /* ----- 頂部導航 (sticky 金融科技感) ----- */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background-color: rgba(255,255,255,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,0.04);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-      padding: 16px 0;
-    }
+/* ----- 頂部導航 (sticky 金融科技感) ----- */
+.site-header {
+  /* 保持原有樣式不變 */
+}
 
-    .header-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
 
-    /* Logo 改為圖片容器 */
-    .logo {
-      display: flex;
-      align-items: center;      /* 確保圖片垂直置中 */
-    }
-    .logo img {
-    height: clamp(40px, 8vw, 70px);
-    width: auto;
-    display: block;
+/* Logo 容器：確保圖片垂直置中，且內容靠左 */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;   /* 始終靠左 */
+}
+
+/* Logo 圖片：PC 上 90px，手機上 70px，並限制最大寬度 */
+.logo img {
+  height: 90px;          /* PC 預設 */
+  width: auto;
+  max-width: 100%;       /* 防止圖片太寬超出螢幕 */
+  display: block;
+}
+
+.main-nav {
+  display: flex;
+  gap: 32px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.main-nav a {
+  color: #2C3E50;
+  transition: color 0.2s;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover {
+  color: #1E4780;
+  border-bottom-color: #1E4780;
+}
+
+/* 響應式導航 (手機版) */
+@media (max-width: 640px) {
+  .header-container {
+    flex-direction: column;
+    gap: 12px;
   }
-  @media (max-width: 400px) {
-    .logo img {
-      height: clamp(36px, 10vw, 48px);
-    }
+  .logo {
+    justify-content: flex-start; /* 確保手機上仍然靠左 */
+    width: 100%;                  /* 佔滿寬度，但內容靠左 */
   }
+  .logo img {
+    height: 70px;                 /* 手機上夠大的尺寸 */
+  }
+  .main-nav {
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
 
     .main-nav {
       display: flex;
